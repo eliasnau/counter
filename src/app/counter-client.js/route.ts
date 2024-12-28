@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 
 export async function GET() {
+  const headersList = headers();
+  const host = 'localhost:3000';
+  const protocol = host.includes('localhost') ? 'http' : 'https';
+
   const clientScript = `
     class CounterClient {
       constructor(options = {}) {
@@ -22,31 +27,44 @@ export async function GET() {
 
       async connect() {
         try {
-          const response = await fetch('https://counterclick.eliasnau.dev/api/realtime');
-          const { url, projectId, channel } = await response.json();
+          console.log('Fetching realtime config...');
+          const response = await fetch('${protocol}://${host}/api/realtime');
+          const config = await response.json();
+          console.log('Realtime config:', config);
 
-          this.ws = new WebSocket(\`\${url}?project=\${projectId}\`);
+          const { url, projectId, channel } = config;
 
-          this.ws.onopen = () => {
-            this.ws?.send(JSON.stringify({
-              type: 'subscribe',
-              channels: [channel],
-            }));
-          };
+          const wsUrl = \`\${url}?project=\${projectId}&channels[]=\${encodeURIComponent(channel)}\`;
+          console.log('Connecting to:', wsUrl);
+          
+          this.ws = new WebSocket(wsUrl);
 
           this.ws.onmessage = (event) => {
             try {
               const data = JSON.parse(event.data);
-              if (data.events?.[0]?.includes('documents') && data.payload?.count !== undefined) {
-                this.callbacks.forEach(cb => cb(data.payload.count));
+              console.log('Received:', data);
+              
+              // Updated event handling
+              if (data.type === 'event' && data.data?.payload?.count !== undefined) {
+                console.log('Count updated:', data.data.payload.count);
+                this.callbacks.forEach(cb => cb(data.data.payload.count));
+              }
+
+              if (data.type === 'error') {
+                console.error('Subscription error:', data);
               }
             } catch (error) {
               console.error('Failed to parse message:', error);
             }
           };
 
-          this.ws.onclose = () => {
+          this.ws.onclose = (event) => {
+            console.log('WebSocket closed:', event.code, event.reason);
             setTimeout(() => this.connect(), 5000);
+          };
+
+          this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
           };
 
         } catch (error) {
@@ -75,8 +93,8 @@ export async function GET() {
   return new NextResponse(clientScript, {
     headers: {
       'Content-Type': 'application/javascript',
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'no-store',
       'Access-Control-Allow-Origin': '*',
     },
   });
-} 
+}
