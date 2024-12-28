@@ -1,5 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 
+import Link from "next/link";
+
 
 export default function Tutorial() {
   return (
@@ -7,12 +9,12 @@ export default function Tutorial() {
       <div className="max-w-2xl mx-auto space-y-12 p-4">
         {/* Back Button */}
         <div className="w-full">
-          <a 
+          <Link
             href="/"
             className="font-mono text-left text-sm text-[#00FFFF] hover:underline"
           >
             ← Back to Game
-          </a>
+          </Link>
         </div>
 
         <h1 className="font-mono text-2xl text-neutral-100">

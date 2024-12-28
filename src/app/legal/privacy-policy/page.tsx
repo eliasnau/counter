@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 /* eslint-disable react/no-unescaped-entities */
 export default function PrivacyPolicy() {
   return (
@@ -5,12 +7,12 @@ export default function PrivacyPolicy() {
       <div className="max-w-2xl mx-auto space-y-12 p-4">
         {/* Back Button */}
         <div className="w-full">
-          <a 
+          <Link
             href="/legal"
             className="font-mono text-left text-sm text-[#00FFFF] hover:underline"
           >
             ← Back to Legal
-          </a>
+          </Link>
         </div>
 
         <h1 className="font-mono text-2xl text-neutral-100">
@@ -110,12 +112,12 @@ export default function PrivacyPolicy() {
             <p className="font-mono text-left text-sm text-neutral-400">
               If you have any questions about this Privacy Policy, please contact us at:
             </p>
-            <a 
+            <Link
               href="mailto:contact@eliasnau.dev"
               className="font-mono text-left text-sm text-[#00FFFF] hover:underline"
             >
               contact@eliasnau.dev
-            </a>
+            </Link>
           </div>
         </div>
       </div>
