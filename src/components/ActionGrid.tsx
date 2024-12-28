@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type ActionButtonProps = {
   value: number
@@ -26,37 +26,50 @@ const ActionButton = ({ value, onClick, disabled }: ActionButtonProps) => (
   </button>
 )
 
-const POSSIBLE_ACTIONS = [
-  [1, -3, 3, -2, 1, -4],
-  [2, -4, 1, -3, 2, -5],
-  [3, -5, 2, -4, 1, -6],
-  [1, -2, 3, -3, 2, -4],
-  [2, -3, 1, -5, 3, -6]
-]
-
 type ActionGridProps = {
   onAction: (value: number) => void
   disabled?: boolean
 }
 
 export function ActionGrid({ onAction, disabled }: ActionGridProps) {
-  const [currentActionSet, setCurrentActionSet] = useState(0)
+  const [buttons, setButtons] = useState<number[]>([])
+
+  const generateRandomButtons = () => {
+    const newButtons: number[] = []
+    
+    // Generate 6 random values
+    for (let i = 0; i < 6; i++) {
+      const isPositive = Math.random() < 0.5
+      
+      if (isPositive) {
+        // Random value between 1 and 3
+        newButtons.push(Math.floor(Math.random() * 3) + 1)
+      } else {
+        // Random value between -6 and -1
+        newButtons.push(-(Math.floor(Math.random() * 6) + 1))
+      }
+    }
+
+    // Shuffle array
+    return newButtons.sort(() => Math.random() - 0.5)
+  }
+
+  // Initial button generation
+  useEffect(() => {
+    setButtons(generateRandomButtons())
+  }, [])
 
   const handleAction = (value: number) => {
     if (disabled) return
-    
     onAction(value)
-    
-    // Switch to next action set
-    setCurrentActionSet((prev) => (prev + 1) % POSSIBLE_ACTIONS.length)
+    // Generate new random buttons after each action
+    setButtons(generateRandomButtons())
   }
-
-  const currentActions = POSSIBLE_ACTIONS[currentActionSet]
 
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="grid grid-cols-3 gap-2">
-        {currentActions.map((value, index) => (
+        {buttons.map((value, index) => (
           <ActionButton
             key={`${value}-${index}`}
             value={value}
