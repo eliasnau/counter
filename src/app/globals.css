@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #171717;
+  --primary-grid-rgb: 255 255 255;
+  --opacity: .04;
+}
+
+body {
+  background-color: var(--background);
+  background-image: 
+    linear-gradient(to right, rgb(var(--primary-grid-rgb) / var(--opacity)) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--primary-grid-rgb) / var(--opacity)) 1px, transparent 1px);
+  background-size: 5rem 5rem;
+}
+
+.bg-grid {
+  background-color: var(--background);
+  background-image: 
+    linear-gradient(to right, rgb(var(--primary-grid-rgb) / var(--opacity)) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--primary-grid-rgb) / var(--opacity)) 1px, transparent 1px);
+  background-size: 5rem 5rem;
+}
