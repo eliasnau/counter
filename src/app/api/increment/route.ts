@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { Client, Databases } from 'node-appwrite';
 import { NextResponse } from 'next/server';
 
@@ -15,76 +14,39 @@ const COUNTER_ID = 'shared_counter';
 
 export async function POST(request: Request) {
   try {
-    const { value } = await request.json();
-    console.log('Parsed payload:', { value });
-    
+    const body = await request.json();
+    const value = body.value;
+
     // Validate input
-    if (!Number.isInteger(value)) {
-      console.log('Invalid payload - value must be an integer');
+    if (typeof value !== 'number') {
       return NextResponse.json({
         success: false,
-        message: 'Invalid payload - value must be an integer'
+        message: 'Value must be a number'
       }, { status: 400 });
     }
 
-    if (value > 3 || value < -6) {
-      console.log('Value out of allowed range (-6 to +3)');
+    if (value < -6 || value > 3) {
       return NextResponse.json({
         success: false,
-        message: 'Value must be between -6 and +3'
+        message: 'Value must be between -6 and 3'
       }, { status: 400 });
     }
 
     try {
-      let currentDoc;
-      
-      // Try to get the document, if it fails, create it
-      try {
-        currentDoc = await databases.getDocument(
-          DATABASE_ID,
-          COLLECTION_ID,
-          COUNTER_ID
-        );
-      } catch (getError) {
-        console.log('Document not found, creating new one');
-        // If document doesn't exist, create it with initial count of 0
-        currentDoc = await databases.createDocument(
-          DATABASE_ID,
-          COLLECTION_ID,
-          COUNTER_ID,
-          {
-            count: 0
-          }
-        );
-      }
-
-      const newCount = currentDoc.count + value;
-      
-      if (newCount < 0) {
-        console.log('Operation would result in negative value');
-        return NextResponse.json({
-          success: false,
-          message: 'Count cannot go below 0'
-        }, { status: 400 });
-      }
-
-      const updatedCounter = await databases.updateDocument(
+      const result = await databases.updateDocument(
         DATABASE_ID,
         COLLECTION_ID,
         COUNTER_ID,
         {
-          count: newCount
+          count: `increment(${value})`
         }
       );
 
-      console.log('Document incremented successfully');
       return NextResponse.json({
         success: true,
-        count: updatedCounter.count
+        count: result.count
       });
-
-    } catch (incrementError) {
-      console.error('Error during increment:', incrementError);
+    } catch {
       return NextResponse.json({
         success: false,
         message: 'Failed to update counter'

@@ -15,7 +15,7 @@ export default function NotFound() {
         
         <div className="space-y-2">
           <p className="text-neutral-400 font-mono">
-            This page doesn't exist in our counter.
+            This page doesn&apos;t exist in our counter.
           </p>
           <p className="text-neutral-400 font-mono text-sm">
             Maybe try incrementing your way back home?
