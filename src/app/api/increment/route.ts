@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Client, Databases } from 'node-appwrite';
 import { NextResponse } from 'next/server';
 
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
           COUNTER_ID
         );
       } catch (getError) {
+        console.log('Document not found, creating new one');
         // If document doesn't exist, create it with initial count of 0
         currentDoc = await databases.createDocument(
           DATABASE_ID,

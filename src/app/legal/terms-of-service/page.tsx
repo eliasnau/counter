@@ -1,6 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import Link from "next/link";
 
-/* eslint-disable react/no-unescaped-entities */
 export default function TermsOfService() {
   return (
     <main className="min-h-screen pt-24 pb-8 bg-grid">

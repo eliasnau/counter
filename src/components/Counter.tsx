@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { NumberColumn } from './NumberColumn';
 import { CooldownBar } from './CooldownBar';
 import { ActionGrid } from './ActionGrid';
-import { anonymousLogin, incrementCounter, getCounter, subscribeToCounter } from '@/lib/appwrite';
+import { incrementCounter, getCounter, subscribeToCounter } from '@/lib/appwrite';
 import { PoweredByBadge } from './PoweredByBadge';
 
 export function Counter() {
@@ -12,7 +12,6 @@ export function Counter() {
   const [cooldown, setCooldown] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRequesting, setIsRequesting] = useState(false);
   const [demotivationalMessage, setDemotivationalMessage] = useState<{id: number, text: string, isLeaving: boolean} | null>(null);
