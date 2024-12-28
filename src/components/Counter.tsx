@@ -14,7 +14,32 @@ export function Counter() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRequesting, setIsRequesting] = useState(false);
+  const [demotivationalMessage, setDemotivationalMessage] = useState<{id: number, text: string, isLeaving: boolean} | null>(null);
+  let messageId = 0;
   const digits = count.toString().padStart(7, '0').split('');
+
+  const demotivationalMessagesList = [
+    "Each click brings you closer to existential dread.",
+    "Your dedication to this pointless task is remarkable.",
+    "Somewhere, your parents are still disappointed.",
+    "Even the counter feels sorry for you.",
+    "Achievement unlocked: Wasted Time",
+    "This won't fill the void inside you.",
+    "Congratulations on accomplishing absolutely nothing.",
+    "Your clicks echo in the vast emptiness of existence.",
+    "At least you're consistent in your poor life choices.",
+    "This is probably the highlight of your day.",
+    "You could be doing something meaningful right now.",
+    "Every number represents a missed opportunity.",
+    "The counter goes up, your life satisfaction goes down.",
+    "Imagine explaining this hobby to your younger self.",
+    "The void stares back, and it's unimpressed.",
+    "Your dedication to mediocrity is inspiring.",
+    "Another click, another step towards digital nihilism.",
+    "Even the algorithm judges your choices.",
+    "You've peaked. It's all downhill from here.",
+    "This won't be mentioned in your obituary.",
+  ];
 
   useEffect(() => {
     const init = async () => {
@@ -64,6 +89,23 @@ export function Counter() {
   const handleAction = async (value: number) => {
     if (isButtonDisabled || !userId || isRequesting) return;
     
+    // 30% chance to show a message after any click
+    if (!demotivationalMessage && Math.random() < 0.3) {
+      const randomMessage = demotivationalMessagesList[Math.floor(Math.random() * demotivationalMessagesList.length)];
+      const newMessage = { id: messageId++, text: randomMessage, isLeaving: false };
+      setDemotivationalMessage(newMessage);
+      
+      // Start fade out after 2.7 seconds
+      setTimeout(() => {
+        setDemotivationalMessage(prev => prev ? { ...prev, isLeaving: true } : null);
+        
+        // Remove message after animation completes
+        setTimeout(() => {
+          setDemotivationalMessage(null);
+        }, 300);
+      }, 2700);
+    }
+
     // 1. Set request lock and optimistic update
     setIsRequesting(true);
     setIsButtonDisabled(true);
@@ -104,6 +146,19 @@ export function Counter() {
   return (
     <div className="min-h-screen bg-[#171717] flex items-center justify-center bg-grid">
       <div className="flex flex-col items-center space-y-8">
+        {demotivationalMessage && (
+          <div 
+            key={`message-${demotivationalMessage.id}`}
+            className={`max-w-md px-4 py-3 bg-[#1c1c1c] rounded-xl border border-white/[0.04] ${
+              demotivationalMessage.isLeaving ? 'animate-fade-out-up' : 'animate-fade-in-down'
+            }`}
+          >
+            <p className="text-center font-mono text-red-500 text-sm">
+              {demotivationalMessage.text}
+            </p>
+          </div>
+        )}
+
         <div className="bg-[#1c1c1c] p-8 rounded-2xl border border-white/[0.04]">
           <div className="flex gap-1">
             {digits.map((digit, idx) => (
