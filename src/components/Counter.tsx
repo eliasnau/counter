@@ -5,6 +5,7 @@ import { NumberColumn } from './NumberColumn';
 import { CooldownBar } from './CooldownBar';
 import { ActionGrid } from './ActionGrid';
 import { anonymousLogin, incrementCounter, getCounter, subscribeToCounter } from '@/lib/appwrite';
+import { PoweredByBadge } from './PoweredByBadge';
 
 export function Counter() {
   const [count, setCount] = useState(0);
@@ -16,7 +17,25 @@ export function Counter() {
   const [isRequesting, setIsRequesting] = useState(false);
   const [demotivationalMessage, setDemotivationalMessage] = useState<{id: number, text: string, isLeaving: boolean} | null>(null);
   let messageId = 0;
-  const digits = count.toString().padStart(7, '0').split('');
+
+  useEffect(() => {
+    const initializeCounter = async () => {
+      try {
+        const response = await fetch('/api/count');
+        const data = await response.json();
+        
+        if (data.count !== undefined) {
+          setCount(data.count);
+        }
+      } catch (error) {
+        console.error('Failed to fetch initial count:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeCounter();
+  }, []);
 
   const demotivationalMessagesList = [
     "Each click brings you closer to existential dread.",
@@ -144,40 +163,48 @@ export function Counter() {
   const isDisabled = isButtonDisabled || isLoading || isRequesting;
 
   return (
-    <div className="min-h-screen bg-[#171717] flex items-center justify-center bg-grid">
-      <div className="flex flex-col items-center space-y-8">
-        {demotivationalMessage && (
-          <div 
-            key={`message-${demotivationalMessage.id}`}
-            className={`max-w-md px-4 py-3 bg-[#1c1c1c] rounded-xl border border-white/[0.04] ${
-              demotivationalMessage.isLeaving ? 'animate-fade-out-up' : 'animate-fade-in-down'
-            }`}
-          >
-            <p className="text-center font-mono text-red-500 text-sm">
-              {demotivationalMessage.text}
-            </p>
-          </div>
-        )}
+    <>
+      <div className="min-h-screen bg-[#171717] flex items-center justify-center bg-grid">
+        <div className="flex flex-col items-center space-y-8">
+          {isLoading ? (
+            // Loading state
+            <div className="bg-[#1c1c1c] p-8 rounded-2xl border border-white/[0.04]">
+              <div className="flex gap-1">
+                {Array(7).fill(0).map((_, idx) => (
+                  <div 
+                    key={idx}
+                    className="w-12 h-16 bg-[#1c1c1c] rounded-lg border border-white/[0.04] flex items-center justify-center"
+                  >
+                    <div className="w-2 h-2 bg-[#00FFFF] rounded-full animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            // Normal counter display
+            <div className="bg-[#1c1c1c] p-8 rounded-2xl border border-white/[0.04]">
+              <div className="flex gap-1">
+                {count.toString().padStart(7, '0').split('').map((digit, idx) => (
+                  <NumberColumn key={`digit-${idx}`} digit={digit} />
+                ))}
+              </div>
+            </div>
+          )}
 
-        <div className="bg-[#1c1c1c] p-8 rounded-2xl border border-white/[0.04]">
-          <div className="flex gap-1">
-            {digits.map((digit, idx) => (
-              <NumberColumn key={idx} digit={digit} />
-            ))}
+          <div className="w-full space-y-4">
+            <div className="text-sm text-neutral-600 flex justify-between">
+              <span>Status</span>
+              <span>
+                {isLoading ? 'Loading...' : `Cooldown ${timeLeft > 0 ? `${timeLeft}ms` : 'Ready'}`}
+              </span>
+            </div>
+            <CooldownBar isActive={cooldown} />
+            <ActionGrid onAction={handleAction} disabled={isDisabled} />
           </div>
-        </div>
-
-        <div className="w-full space-y-4">
-          <div className="text-sm text-neutral-600 flex justify-between">
-            <span>Status</span>
-            <span>
-              {isLoading ? 'Loading...' : `Cooldown ${timeLeft > 0 ? `${timeLeft}ms` : 'Ready'}`}
-            </span>
-          </div>
-          <CooldownBar isActive={cooldown} />
-          <ActionGrid onAction={handleAction} disabled={isDisabled} />
         </div>
       </div>
-    </div>
+
+      <PoweredByBadge type='partners'/>
+    </>
   );
 } 
