@@ -28,14 +28,24 @@ export const anonymousLogin = async () => {
   }
 }
 
-export const incrementCounter = async (userId: string, value: number) => {
+export const incrementCounter = async ( value: number) => {
   try {
-    const execution = await functions.createExecution(
-      FUNCTION_ID,
-      JSON.stringify({ userId, value })
-    );
+    // const execution = await functions.createExecution(
+    //   FUNCTION_ID,
+    //   JSON.stringify({ userId, value })
+    // );
     
-    return JSON.parse(execution.responseBody || '{"success":false,"message":"Empty response"}');
+    // return JSON.parse(execution.responseBody || '{"success":false,"message":"Empty response"}');
+
+    const response = await fetch('/api/increment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ value }),
+      });
+
+      return response.json();
   } catch (error) {
     console.error('Error incrementing counter:', error);
     return { success: false, message: 'Request failed' };

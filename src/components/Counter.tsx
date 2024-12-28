@@ -63,12 +63,9 @@ export function Counter() {
   useEffect(() => {
     const init = async () => {
       try {
-        const [session, initialCounter] = await Promise.all([
-          anonymousLogin(),
-          getCounter()
-        ]);
+          const initialCounter = await getCounter();
         
-        setUserId(session.$id);
+        //setUserId(session.$id);
         if (initialCounter.success) {
           setCount(initialCounter.count);
         }
@@ -106,7 +103,7 @@ export function Counter() {
   }, [cooldown]);
 
   const handleAction = async (value: number) => {
-    if (isButtonDisabled || !userId || isRequesting) return;
+    if (isButtonDisabled || isRequesting) return;
     
     // 30% chance to show a message after any click
     if (!demotivationalMessage && Math.random() < 0.3) {
@@ -142,7 +139,7 @@ export function Counter() {
 
     try {
       // Send request immediately without waiting for cooldown
-      const result = await incrementCounter(userId, value);
+      const result = await incrementCounter(value);
       console.log('Request completed, other clients should update now');
 
       if (!result.success) {
