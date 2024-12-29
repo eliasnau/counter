@@ -143,10 +143,12 @@ export function Counter() {
 
       if (!result.success) {
         setCount(previousCount);
+        // eslint-disable-next-line no-console
         console.error('Failed to increment:', result.message);
       }
     } catch (error) {
       setCount(previousCount);
+      // eslint-disable-next-line no-console
       console.error('Failed to increment:', error);
     } finally {
       // Wait for cooldown to finish before re-enabling button

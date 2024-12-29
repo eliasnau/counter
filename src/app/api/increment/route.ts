@@ -33,12 +33,27 @@ export async function POST(request: Request) {
     }
 
     try {
+      const doc = await databases.getDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        COUNTER_ID
+      );
+
+      const newCount = doc.count + value;
+
+      if (newCount < 0) {
+        return NextResponse.json({
+          success: false,
+          message: 'Count cannot go below 0'
+        }, { status: 400 });
+      }
+
       const result = await databases.updateDocument(
         DATABASE_ID,
         COLLECTION_ID,
         COUNTER_ID,
         {
-          count: `increment(${value})`
+          count: newCount
         }
       );
 
@@ -46,7 +61,9 @@ export async function POST(request: Request) {
         success: true,
         count: result.count
       });
-    } catch {
+
+    } catch (error) {
+      console.error('Database error:', error);
       return NextResponse.json({
         success: false,
         message: 'Failed to update counter'
@@ -54,7 +71,7 @@ export async function POST(request: Request) {
     }
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Request error:', error);
     return NextResponse.json({
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error'
