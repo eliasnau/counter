@@ -8,6 +8,24 @@ import { Hash } from 'lucide-react'
 export function Navbar() {
   const pathname = usePathname()
 
+  const routes = [
+    {
+      label: 'Home',
+      href: '/',
+      pattern: /^\/$/
+    },
+    {
+      label: 'Documentation',
+      href: '/documentation',
+      pattern: /^\/documentation/
+    },
+    {
+      label: 'Dashboard',
+      href: '/dashboard',
+      pattern: /^\/dashboard/
+    }
+  ]
+
   const links = [
     { href: '/tutorial', label: 'Tutorial' },
     { href: '/docs', label: 'Docs' },
@@ -30,8 +48,9 @@ export function Navbar() {
             <span className="font-mono font-bold">Counter</span>
           </Link>
 
-          {/* Navigation Links */}
-          <div className="flex items-center">
+          {/* Navigation Links and Login */}
+          <div className="flex items-center space-x-2">
+            {/* Existing Links */}
             {links.map(({ href, label }) => {
               const isActive = pathname === href
               
@@ -66,6 +85,17 @@ export function Navbar() {
                 </Link>
               )
             })}
+
+            {/* Login Button */}
+            <Link
+              href="/login"
+              className="ml-4 px-4 py-2 rounded-lg bg-[#1c1c1c] border border-white/[0.04] 
+                         text-sm font-mono text-neutral-400 hover:text-neutral-200 
+                         hover:bg-[#252525] hover:border-[#00FFFF]/10 
+                         transition-all duration-200"
+            >
+              Login
+            </Link>
           </div>
         </div>
       </div>

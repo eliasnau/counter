@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
-import { Navbar } from "@/components/Navbar";
 import "./globals.css";
+import { ToastProvider } from '@/components/ui/ToastProvider';
 
 const jetbrainsMono = JetBrains_Mono({ 
   subsets: ["latin"],
@@ -21,8 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${jetbrainsMono.variable} font-mono`}>
-        <Navbar />
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );
