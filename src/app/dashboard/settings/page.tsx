@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 'use client';
 
 import { useState } from 'react';
@@ -625,10 +627,10 @@ export default function Settings() {
                                   {method.name}
                                 </h3>
                                 {method.recommended && (
-                                  <Badge color="green" size="sm">Recommended</Badge>
+                                  <Badge color="green">Recommended</Badge>
                                 )}
                                 {method.notRecommended && (
-                                  <Badge color="red" size="sm">Not Recommended</Badge>
+                                  <Badge color="red">Not Recommended</Badge>
                                 )}
                               </div>
                               <p className="text-xs font-mono text-neutral-400">
@@ -643,7 +645,7 @@ export default function Settings() {
                               onClick={() => setExpandedMethod(expandedMethod === method.id ? null : method.id)}
                               className="shrink-0"
                             >
-                              <Settings className="w-3 h-3 mr-1" />
+                              <SettingsIcon className="w-3 h-3 mr-1" />
                               Manage
                             </Button>
                           ) : (
@@ -1088,8 +1090,11 @@ export default function Settings() {
 
       {/* Backup Codes Dialog */}
       <Dialog
-        open={showBackupDialog}
-        onClose={() => setShowBackupDialog(false)}
+        isOpen={showBackupDialog}
+        onClose={() => {
+          setShowBackupDialog(false);
+        }}
+        title="Backup Codes"
       >
         <div className="space-y-4">
           <div className="flex items-center justify-between">

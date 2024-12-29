@@ -119,7 +119,10 @@ export default function Counters() {
         createdAt: new Date().toISOString(),
         lastUpdated: new Date().toISOString(),
         views: 0,
-        settings: newCounter.settings
+        settings: {
+          ...newCounter.settings,
+          mobileOptimized: true
+        }
       };
 
       setCounters([counter, ...counters]);

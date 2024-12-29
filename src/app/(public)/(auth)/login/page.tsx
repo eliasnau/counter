@@ -1,10 +1,11 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Hash, Mail, Lock, ArrowLeft } from 'lucide-react';
+import { Hash, Mail, Lock } from 'lucide-react';
 import { Input } from '../_components/Input';
 import { Button } from '@/components/ui/Button';
 

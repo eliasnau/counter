@@ -26,7 +26,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
   variant = 'default'
 }) => {
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog title={title} isOpen={open} onClose={onClose}>
       <div className="space-y-4">
         <div className="space-y-2">
           <h3 className="text-lg font-mono text-neutral-200">

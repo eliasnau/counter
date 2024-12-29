@@ -51,7 +51,7 @@ export default function Docs() {
                 {"\n  "}
                 <span className="text-[#a5d4ff]">onUpdate:</span>{" "}
                 <span className="text-neutral-200">(count)</span>{" "}
-                <span className="text-[#81b3ff]">=></span>{" "}
+                <span className="text-[#81b3ff]">={'>'}</span>{" "}
                 <span className="text-neutral-200">{"{"}</span>
                 {"\n    "}
                 <span className="text-[#70c0b1]">console</span>
@@ -179,7 +179,7 @@ export default function Docs() {
                 <span className="text-neutral-200">{"});"}</span>
                 {"\n\n    "}
                 <span className="text-[#81b3ff]">return</span>{" "}
-                <span className="text-neutral-200">() => counter.</span>
+                <span className="text-neutral-200">() ={'>'} counter.</span>
                 <span className="text-[#a5d4ff]">disconnect</span>
                 <span className="text-neutral-200">();</span>
                 {"\n  "}
