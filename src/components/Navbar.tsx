@@ -45,7 +45,7 @@ export function Navbar() {
             `}
           >
             <Hash className="w-5 h-5" />
-            <span className="font-mono font-bold">Counter</span>
+            <span className="font-mono font-bold">CounterThing</span>
           </Link>
 
           {/* Navigation Links and Login */}

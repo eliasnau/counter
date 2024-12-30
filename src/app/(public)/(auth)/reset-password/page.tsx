@@ -44,7 +44,7 @@ const ResetPasswordPage: React.FC = () => {
           >
             <Link href="/" className="flex items-center gap-2 text-[#00FFFF]">
               <Hash className="w-8 h-8" />
-              <span className="text-2xl font-mono">Counter</span>
+              <span className="text-2xl font-mono">CounterThing</span>
             </Link>
           </motion.div>
 

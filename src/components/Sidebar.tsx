@@ -55,7 +55,7 @@ export function Sidebar() {
         <div className="p-6">
           <div className="flex items-center gap-2 text-[#00FFFF]">
             <Hash className="w-6 h-6" />
-            <span className="text-xl font-mono">Counter</span>
+            <span className="text-xl font-mono">CounterThing</span>
           </div>
         </div>
 
