@@ -1,8 +1,11 @@
 import Link from 'next/link'
 import { Hash } from 'lucide-react'
+import { Navbar } from '@/components/Navbar'
 
 export default function NotFound() {
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-[#171717] flex flex-col items-center justify-center p-4 bg-grid">
       <div className="space-y-8 text-center">
         <div className="space-y-4">
@@ -36,5 +39,6 @@ export default function NotFound() {
       {/* Grid Overlay */}
       <div className="fixed inset-0 pointer-events-none bg-grid-small opacity-20" />
     </div>
+    </>
   )
 } 
